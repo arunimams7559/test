@@ -7,19 +7,19 @@ const Sidebar: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();          
-    navigate('/'); 
-  }; 
+    logout();
+    navigate('/');
+  };
 
   if (!user) {
-    return <p>Loading ....</p>;
+    return <p className="sidebar-loading">Loading ....</p>;
   }
 
   return (
-    <aside style={{ padding: '1rem', backgroundColor: '#f0f0f0', height: '100vh' }}>
-      <h3>Hello, {user.username}!</h3>
-      <p>Email: {user.email}</p>
-      <button onClick={handleLogout} style={{ cursor: 'pointer', padding: '0.5rem 1rem' }}>
+    <aside className="sidebar-container">
+      <h3 className="sidebar-greeting">Hello, {user.username}</h3>
+      <p className="sidebar-email">Email: {user.email}</p>
+      <button className="sidebar-logout-btn" onClick={handleLogout}>
         Logout
       </button>
     </aside>

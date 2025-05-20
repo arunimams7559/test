@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../style/userlist.css';
+import '../style/chatpage.css';
 import { useUser } from '../context/usercontext';
 
 interface User {
@@ -42,7 +42,7 @@ const UserList: React.FC<UserListProps> = ({ onSelectUser }) => {
         placeholder="Search users..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="user-search"
+        className="user-search-input"
       />
       <ul className="user-list">
         {filteredUsers.map((u) => (
@@ -52,7 +52,7 @@ const UserList: React.FC<UserListProps> = ({ onSelectUser }) => {
             className="user-list-item"
           >
             <span className={`status-dot ${u.isOnline ? 'online' : 'offline'}`} />
-            {u.username}
+            <span className="user-list-username">{u.username}</span>
           </li>
         ))}
       </ul>

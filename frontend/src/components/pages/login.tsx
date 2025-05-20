@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom'; // <-- Import Link
+import { useNavigate, Link } from 'react-router-dom'; 
 import { UserContext } from '../context/usercontext';
 import '../style/login.css';
 
@@ -51,7 +51,7 @@ const Login: React.FC = () => {
 
         <button type="submit">Log In</button>
 
-        {/* Signup link */}
+       
         <p>
           Don't have an account?{' '}
           <Link to="/signup">Sign up here</Link>
