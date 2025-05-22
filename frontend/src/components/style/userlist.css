@@ -1,0 +1,248 @@
+
+.chatapp-user-list-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+  padding: 16px;
+  background-color: var(--chatapp-channel-background); 
+  color: var(--chatapp-text-primary);
+  overflow-y: auto; 
+}
+
+.chatapp-user-list-header {
+  margin-bottom: 16px;
+  flex-shrink: 0; 
+}
+
+.chatapp-user-list-header h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--chatapp-text-primary);
+}
+
+.chatapp-user-search-container {
+  position: relative;
+}
+
+.chatapp-search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  fill: var(--chatapp-text-secondary);
+}
+
+.chatapp-user-search {
+  background-color: var(--chatapp-input-background);
+  color: var(--chatapp-input-text);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px 10px 32px; /* Left padding for icon */
+  font-size: 0.9rem;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+.chatapp-user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; 
+  overflow-y: auto; 
+}
+
+.chatapp-user-list-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.chatapp-user-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.05); /* Subtle hover effect */
+}
+
+.chatapp-user-list-avatar {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 12px;
+  flex-shrink: 0; /* Prevent avatar from shrinking */
+}
+
+.chatapp-user-list-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chatapp-user-list-info {
+  flex-grow: 1;
+  min-width: 0; /* Allows text to truncate with ellipsis */
+}
+
+.chatapp-user-list-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--chatapp-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatapp-user-list-status {
+  font-size: 0.8rem;
+  color: var(--chatapp-text-secondary);
+}
+
+/* Loading and No Users Found States */
+.chatapp-user-list-loading,
+.chatapp-no-users-found {
+  color: var(--chatapp-text-secondary);
+  display: flex;
+  flex-direction: column; /* Stack spinner/text vertically */
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1; /* Take available space */
+  text-align: center;
+}
+
+.chatapp-user-list-loading .chatapp-loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid #7289da; /* chatapp blue for spinner */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 8px;
+}
+
+/* Status Indicator in User List (same as chatpage.css) */
+.chatapp-user-list-avatar .chatapp-status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--chatapp-channel-background); /* Border matches background */
+}
+
+.chatapp-user-list-avatar .chatapp-status-indicator.online {
+  background-color: var(--chatapp-online);
+}
+
+.chatapp-user-list-avatar .chatapp-status-indicator.offline {
+  background-color: var(--chatapp-offline);
+}
+
+/* Responsive Adjustments */
+
+/* Tablet and below (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .chatapp-user-list-container {
+    padding: 12px; /* Slightly less padding */
+  }
+
+  .chatapp-user-list-header h3 {
+    font-size: 1rem; /* Slightly smaller heading */
+  }
+
+  .chatapp-user-search {
+    padding: 8px 10px 8px 30px; /* Adjust padding for search input */
+    font-size: 0.85rem;
+  }
+
+  .chatapp-search-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .chatapp-user-list-item {
+    padding: 6px; /* Smaller item padding */
+    margin-bottom: 6px;
+  }
+
+  .chatapp-user-list-avatar {
+    width: 28px; /* Smaller avatars */
+    height: 28px;
+    margin-right: 10px;
+  }
+
+  .chatapp-user-list-name {
+    font-size: 0.85rem;
+  }
+
+  .chatapp-user-list-status {
+    font-size: 0.75rem;
+  }
+
+  .chatapp-user-list-avatar .chatapp-status-indicator {
+    width: 8px; /* Smaller status indicator */
+    height: 8px;
+    border-width: 1.5px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .chatapp-user-list-container {
+    padding: 10px; 
+    height: auto; 
+    max-height: 40vh; 
+  }
+
+  .chatapp-user-list-header {
+    margin-bottom: 10px;
+  }
+
+  .chatapp-user-list-header h3 {
+    font-size: 0.95rem;
+  }
+
+  .chatapp-user-search {
+    padding: 7px 8px 7px 28px;
+    font-size: 0.8rem;
+  }
+
+  .chatapp-search-icon {
+    width: 12px;
+    height: 12px;
+    left: 8px;
+  }
+
+  .chatapp-user-list-item {
+    padding: 5px;
+    margin-bottom: 5px;
+  }
+
+  .chatapp-user-list-avatar {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+
+  .chatapp-user-list-name {
+    font-size: 0.8rem;
+  }
+
+  .chatapp-user-list-status {
+    font-size: 0.7rem;
+  }
+
+  .chatapp-user-list-avatar .chatapp-status-indicator {
+    width: 7px;
+    height: 7px;
+    border-width: 1px;
+  }
+}

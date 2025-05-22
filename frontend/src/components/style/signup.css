@@ -1,52 +1,101 @@
+/* Signup Page Styles */
 .signup-container {
-  max-width: 400px;
-  margin: 100px auto;
-  padding: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  max-width: 420px;
+  margin: 8vh auto;
+  padding: 2.8rem;
+  border-radius: 16px;
   background-color: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .signup-container h2 {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
+  color: #1a202c;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+.signup-container h2:after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
+  margin: 0.8rem auto 0;
+  border-radius: 2px;
 }
 
 .signup-container input {
   width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
   font-size: 1rem;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+.signup-container input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: none;
+  background: #fff;
 }
 
 .signup-container button {
   width: 100%;
-  padding: 0.75rem;
-  background-color: #28a745;
+  padding: 1rem;
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+  margin-top: 0.5rem;
 }
 
 .signup-container button:hover {
-  background-color: #218838;
+  background: linear-gradient(to right, #2563eb, #3b82f6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(59, 130, 246, 0.35);
+}
+
+.signup-container button:active {
+  transform: translateY(1px);
 }
 
 .signup-container p {
-  margin-top: 1rem;
+  margin-top: 1.8rem;
   text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
 }
 
 .signup-container a {
-  color: #007bff;
+  color: #3b82f6;
   text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
 }
 
 .signup-container a:hover {
-  text-decoration: underline;
+  color: #2563eb;
+  text-decoration: none;
 }

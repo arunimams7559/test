@@ -1,92 +1,101 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '../context/usercontext';
 import io from 'socket.io-client';
 import axios from 'axios';
-import '../style/chatpage.css';
+
 
 const socket = io('http://localhost:5000');
+(window as any).socket = socket;
 
 interface Message {
   sender: string;
-  receiver: string;
   text: string;
   timestamp: string;
 }
 
 interface ChatProps {
-  selectedUser: { _id: string; username: string } | null;
+  selectedUser: {
+    _id: string;
+    username: string;
+    isOnline?: boolean;
+    avatar?: string;
+  } | null;
 }
 
 const Chat: React.FC<ChatProps> = ({ selectedUser }) => {
   const { user } = useUser();
   const [messageInput, setMessageInput] = useState('');
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom when messages update
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (user?._id) {
+      socket.emit('user_connected', user._id);
+    }
+
+    return () => {
+    
+    };
+  }, [user]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
-  // Fetch chat history
   useEffect(() => {
     if (!user || !selectedUser) return;
 
+    setLoading(true);
     const fetchChatHistory = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/userauth/messages', {
+        const response = await axios.get('http://localhost:5000/api/userauth/messages', {
           params: {
             senderId: user._id,
             receiverId: selectedUser._id,
           },
         });
 
-        const msgs: Message[] = data.messages.map((m: any) => ({
-          sender: m.senderId.username,
-          receiver: m.receiverId.username,
-          text: m.content,
-          timestamp: new Date(m.timestamp).toLocaleTimeString(),
+        const messages = response.data.messages.map((msg: any) => ({
+          sender: msg.senderId.username,
+          text: msg.content,
+          timestamp: new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         }));
 
-        setChatMessages(msgs);
+        setChatMessages(messages);
       } catch (err) {
         console.error('Error fetching chat history:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchChatHistory();
   }, [user, selectedUser]);
 
-  // Handle incoming socket messages
   useEffect(() => {
-    const receiveMessage = (incoming: Message) => {
-      const isRelevant =
-        (incoming.sender === user?.username && incoming.receiver === selectedUser?.username) ||
-        (incoming.sender === selectedUser?.username && incoming.receiver === user?.username);
-
-      if (isRelevant) {
-        setChatMessages((prev) => [...prev, incoming]);
-      }
+    const receiveMessage = (incomingMessage: Message) => {
+      setChatMessages((prevMessages) => [...prevMessages, incomingMessage]);
     };
 
     socket.on('chat message', receiveMessage);
+
     return () => {
       socket.off('chat message', receiveMessage);
     };
-  }, [user, selectedUser]);
+  }, []);
 
-  // Send message
   const handleSendMessage = async () => {
     if (!messageInput.trim() || !user || !selectedUser) return;
 
-    const outgoing: Message = {
+    const newMessage: Message = {
       sender: user.username,
-      receiver: selectedUser.username,
       text: messageInput,
-      timestamp: new Date().toLocaleTimeString(),
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
-    socket.emit('chat message', outgoing);
+    socket.emit('chat message', newMessage);
 
     try {
       await axios.post('http://localhost:5000/api/userauth/messages', {
@@ -102,40 +111,79 @@ const Chat: React.FC<ChatProps> = ({ selectedUser }) => {
   };
 
   if (!selectedUser) {
-    return <div className="chat-wrapper">Select a user to start chatting.</div>;
+
+    return (
+      <div className="chatapp-chat-wrapper chatapp-empty-chat">
+        <div className="chatapp-empty-chat-state">
+          <svg className="chatapp-empty-chat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M12 3.5C6.48 3.5 2 7.98 2 13.5S6.48 23.5 12 23.5 22 19.02 22 13.5 17.52 3.5 12 3.5zm0 18c-4.14 0-7.5-3.36-7.5-7.5s3.36-7.5 7.5-7.5 7.5 3.36 7.5 7.5-3.36 7.5-7.5 7.5zM11 11h2v5h-2zm0-3h2v2h-2z"/>
+          </svg>
+          <p>Select a user to start chatting.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="chat-wrapper">
-      <h3>{selectedUser.username}</h3>
-
-      <div className="chat-messages">
-        {chatMessages.map((msg, i) => {
-          const me = msg.sender === user?.username;
-          return (
-            <div
-              key={i}
-              className={`message-bubble ${me ? 'sent' : 'received'}`}
-            >
-              <div className="message-text">
-                {msg.text}
-                <div className="message-meta">{msg.timestamp}</div>
-              </div>
-            </div>
-          );
-        })}
-        <div ref={bottomRef} />
+    <div className="chatapp-chat-wrapper">
+      <div className="chatapp-chat-header">
+        <div className="chatapp-chat-user-info">
+          <div className="chatapp-chat-user-avatar">
+            <img
+              src={selectedUser.avatar || 'https://avatar.iran.liara.run/public/boy'}
+              alt={selectedUser.username}
+            />
+            <span className={`chatapp-status-indicator ${selectedUser.isOnline ? 'online' : 'offline'}`}></span>
+          </div>
+          <div className="chatapp-chat-user-details">
+            <h3>{selectedUser.username}</h3>
+            <p className={`chatapp-status-text ${selectedUser.isOnline ? 'online' : 'offline'}`}>
+              {selectedUser.isOnline ? 'Online' : 'Offline'}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="chat-input">
+      <div className="chatapp-chat-messages">
+        {loading ? (
+          <div className="chatapp-loading-messages">
+            <div className="chatapp-loading-spinner"></div>
+            <p>Loading messages...</p>
+          </div>
+        ) : chatMessages.length === 0 ? (
+          <div className="chatapp-no-messages">
+            <p>No messages yet. Say hello!</p>
+          </div>
+        ) : (
+          chatMessages.map((msg, index) => {
+            const sentByCurrentUser = msg.sender === user?.username;
+            return (
+              <div
+                key={index}
+                className={`chatapp-message-bubble ${sentByCurrentUser ? 'sent' : 'received'}`}
+              >
+                <span className="chatapp-message-text">{msg.text}</span>
+                <span className="chatapp-message-meta">{msg.timestamp}</span>
+              </div>
+            );
+          })
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <div className="chatapp-chat-input">
         <input
           type="text"
+          placeholder={`Message @${selectedUser.username}`}
           value={messageInput}
-          placeholder="Type a message…"
           onChange={(e) => setMessageInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
         />
-        <button onClick={handleSendMessage}>Send</button>
+        <button onClick={handleSendMessage} aria-label="Send message">
+          <svg className="chatapp-send-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
       </div>
     </div>
   );
