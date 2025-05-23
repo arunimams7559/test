@@ -32,9 +32,12 @@ const Signup: React.FC = () => {
       alert('Signup failed. Please try again.');
     }
   };
-
   return (
     <div className="signup-container">
+      <div className="chatapp-app-name">
+        <span className="chatapp-logo">💬</span>
+        <h1>ChatWave</h1>
+      </div>
       <form onSubmit={handleSignup}>
         <h2>Signup</h2>
         <input

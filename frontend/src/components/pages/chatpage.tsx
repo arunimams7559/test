@@ -1,4 +1,4 @@
-// chatpage.tsx
+
 import React, { useState } from 'react';
 import Sidebar from './sidebar';
 import UserList from './userlist';

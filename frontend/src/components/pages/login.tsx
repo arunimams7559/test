@@ -27,9 +27,12 @@ const Login: React.FC = () => {
       alert('Invalid email or password. Please try again.');
     }
   };
-
   return (
     <div className="login-container">
+      <div className="chatapp-app-name">
+        <span className="chatapp-logo">💬</span>
+        <h1>ChatWave</h1>
+      </div>
       <form onSubmit={handleLogin}>
         <h2>Login</h2>
 

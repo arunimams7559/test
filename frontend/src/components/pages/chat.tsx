@@ -115,9 +115,7 @@ const Chat: React.FC<ChatProps> = ({ selectedUser }) => {
     return (
       <div className="chatapp-chat-wrapper chatapp-empty-chat">
         <div className="chatapp-empty-chat-state">
-          <svg className="chatapp-empty-chat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-            <path d="M12 3.5C6.48 3.5 2 7.98 2 13.5S6.48 23.5 12 23.5 22 19.02 22 13.5 17.52 3.5 12 3.5zm0 18c-4.14 0-7.5-3.36-7.5-7.5s3.36-7.5 7.5-7.5 7.5 3.36 7.5 7.5-3.36 7.5-7.5 7.5zM11 11h2v5h-2zm0-3h2v2h-2z"/>
-          </svg>
+
           <p>Select a user to start chatting.</p>
         </div>
       </div>
@@ -152,7 +150,7 @@ const Chat: React.FC<ChatProps> = ({ selectedUser }) => {
           </div>
         ) : chatMessages.length === 0 ? (
           <div className="chatapp-no-messages">
-            <p>No messages yet. Say hello!</p>
+            <p> Say hello!</p>
           </div>
         ) : (
           chatMessages.map((msg, index) => {
@@ -174,7 +172,7 @@ const Chat: React.FC<ChatProps> = ({ selectedUser }) => {
       <div className="chatapp-chat-input">
         <input
           type="text"
-          placeholder={`Message @${selectedUser.username}`}
+          placeholder={`Type your Message...`}
           value={messageInput}
           onChange={(e) => setMessageInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
